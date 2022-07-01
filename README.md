@@ -1,34 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js, Prisma, TRPC Demo
+
+This is a [Next.js](https://nextjs.org/) project implementing [Prisma](https://www.prisma.io/) and [TRPC](https://trpc.io/) to access a Postgres database.
 
 ## Getting Started
 
-First, run the development server:
+Requirements:
+
+- Docker
+- Yarn
+
+First, install dependencies:
 
 ```bash
-npm run dev
-# or
+yarn install
+```
+
+Next, start the docker postgres database:
+
+```bash
+yarn db:start
+```
+
+Finally, start the development server:
+
+```bash
 yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Project Overview
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+top-level directories:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- `components` - individual react components
+- `lib` - server libraries (this is where our TRPC logic is)
+- `pages` - Next.js file-system based pages
+- `prisma` - Prisma schema and migrations
+- `public` - public assets
+- `styles` - css for styling
+- `utils` - client-side utilities
 
-## Learn More
+## How to develop
 
-To learn more about Next.js, take a look at the following resources:
+#### Modify the Prisma Schema
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Add a `model` to the `schema.prisma` file in `./prisma`
+2. Run `yarn prisma migrate dev` to generate the migration and client
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+#### Create the TRPC router
 
-## Deploy on Vercel
+1. Add a new router to `./lib/trpc/routers/*` to access data
+2. Merge the router in `./lib/trpc/trpc.ts`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### Build 🔨
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Build the components/pages that use the `trpc` util from `./utils/trpc.ts`
